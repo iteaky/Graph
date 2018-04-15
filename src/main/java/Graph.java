@@ -30,11 +30,36 @@ public class Graph {
     }
 
 
-    public Graph findRoute(int numberOfMainvertex) {
+    public Graph belmanFord(int numberOfMainVertex) {
         for (int i = 0; i < vector.length; i++) {
-            this.vector[i] = numberOfMainvertex;
+            this.vector[i] = numberOfMainVertex;
         }
-        Vertex vertex = vertexes.get(numberOfMainvertex - 1);
+
+        vertexes.forEach(vertex -> {
+            if (vertex.getNumber() == numberOfMainVertex) vertex.setWeight(0);
+            else vertex.setWeight(Integer.MAX_VALUE);
+        });
+
+        for (int i = 0; i < vertexes.size() - 1; i++) {
+            vertexes.forEach(vertex -> vertex.routes.forEach((key, value) -> {
+                if (vertex.getWeight() != Integer.MAX_VALUE) {
+                    if (vertexes.get(key - 1).getWeight() > vertex.getWeight() + value) {
+                        vertexes.get(key - 1).setWeight(vertex.getWeight() + value);
+                        vector[key - 1] = vertex.getNumber();
+
+                    }
+                }
+            }));
+        }
+        return this;
+    }
+
+
+    public Graph deikstra(int numberOfMainVertex) {
+        for (int i = 0; i < vector.length; i++) {
+            this.vector[i] = numberOfMainVertex;
+        }
+        Vertex vertex = vertexes.get(numberOfMainVertex - 1);
         vertex.setWeight(0);
         vertex.routes.forEach((k, v) -> vertexes.get(k - 1).setWeight(Integer.MAX_VALUE));
 

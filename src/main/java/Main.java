@@ -16,6 +16,8 @@ public class Main {
         vertex1.routes.put(4, 50);
         vertex1.routes.put(5, 10);
 
+
+
         vertex3.routes.put(5, 10);
 
         vertex4.routes.put(2, 40);
@@ -32,11 +34,15 @@ public class Main {
         drevoList.add(vertex5);
 
         Graph graph = new Graph(drevoList);
-        Integer mainVertex = 1;
-        final Graph route1 = graph.findRoute(mainVertex);
+        Graph graph1 = new Graph(drevoList);
+        Integer mainVertex = 3;
+        final Graph route1 = graph.deikstra(mainVertex);
         System.out.println("Vector of last min Vertex is: " + Arrays.toString(route1.vector));
         route1.getVertexes().forEach(s -> System.out.println("Route from " + mainVertex + " to " + s.getNumber() + " is equals " + s.getWeight()));
 
+        final Graph route2 = graph1.belmanFord(mainVertex);
+        System.out.println("Vector of last min Vertex is: " + Arrays.toString(route2.vector));
+        route2.getVertexes().forEach(s -> System.out.println("Route from " + mainVertex + " to " + s.getNumber() + " is equals " + s.getWeight()));
 
     }
 }

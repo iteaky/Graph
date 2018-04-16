@@ -3,16 +3,20 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.lang.Integer.MAX_VALUE;
+
 public class Graph {
 
     private List<Vertex> vertexes;
 
     public int vector[];
 
+    public Integer[][] route;
+
     Graph(List<Vertex> vertexes) {
         this.vertexes = vertexes;
         this.vector = new int[vertexes.size()];
-
+        this.route = new Integer[vertexes.size()][vertexes.size()];
     }
 
     public List<Vertex> getVertexes() {
@@ -80,5 +84,50 @@ public class Graph {
             minVertex.setVisited();
         }
         return this;
+    }
+
+    public Integer[][] floidUorshal() {
+
+        Integer [][] mass = toMatrix(this);
+
+        for (int i = 0; i < mass.length; i++) {
+            for (int j = 0; j < mass.length; j++) {
+                if(route[i][j]==null) route[i][j] =  i + 1;
+                int a = mass[i][j];
+                if(a == MAX_VALUE) continue;
+                for (int k = 0; k < mass.length; k++) {
+                    int b = mass[k][i];
+                    int c = mass[k][j];
+                    if (b != MAX_VALUE) {
+                        if (c > (b + a)) {
+                            if (k != j) {
+                                mass[k][j] = (a + b);
+                                route[k][j] = i + 1;
+                            } else {
+                                mass[k][j] = 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return mass;
+    }
+
+    private Integer[][] toMatrix(Graph graph) {
+        int size = graph.vertexes.size();
+        Integer[][] matrix = new Integer[size][size];
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                matrix[i][j] = vertexes.get(i).routes.get(j+1);
+                if(matrix[i][j]==null) {
+                    matrix[i][j] = MAX_VALUE;
+                }
+            }
+        }
+
+
+        return matrix;
     }
 }
